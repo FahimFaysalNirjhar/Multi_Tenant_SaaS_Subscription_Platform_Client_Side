@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
-
+import { Link, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import useAxios from "../Hooks/useAxios";
 import { useAuth } from "../context/AuthContext";
 
-const Login = () => {
+const Register = () => {
   const axiosInstance = useAxios();
-  const { login } = useAuth();
-
   const navigate = useNavigate();
-  const location = useLocation();
+
+  const { login } = useAuth();
 
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
+    organizationName: "",
   });
 
   const handleChange = (event) => {
@@ -34,29 +34,24 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const response = await axiosInstance.post("/api/auth/login", formData);
+      const response = await axiosInstance.post("/api/auth/register", formData);
 
-      const { accessToken, user } = response.data.data;
+      console.log("Registration response:", response.data);
 
-      // Store access token
-      localStorage.setItem("accessToken", accessToken);
+      const { user } = response.data.data;
 
       // Update AuthContext
       login(user);
 
-      toast.success("Login successful!");
+      toast.success("Registration successful!");
 
-      const redirectPath = location.state?.from || "/";
-
-      navigate(redirectPath, {
+      navigate("/", {
         replace: true,
       });
     } catch (error) {
-      console.error(error);
+      console.error("Registration error:", error);
 
-      toast.error(
-        error?.response?.data?.message || "Invalid email or password",
-      );
+      toast.error(error?.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -72,16 +67,60 @@ const Login = () => {
           </Link>
 
           <h1 className="mt-6 text-2xl font-bold text-gray-900">
-            Welcome Back
+            Create Your Account
           </h1>
 
           <p className="mt-2 text-sm text-gray-500">
-            Sign in to access your organization dashboard.
+            Create an account to start managing your organization.
           </p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Full Name */}
+          <div>
+            <label
+              htmlFor="name"
+              className="mb-2 block text-sm font-medium text-gray-700"
+            >
+              Full Name
+            </label>
+
+            <input
+              id="name"
+              name="name"
+              type="text"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="John Doe"
+              required
+              autoComplete="name"
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
+
+          {/* Organization Name */}
+          <div>
+            <label
+              htmlFor="organizationName"
+              className="mb-2 block text-sm font-medium text-gray-700"
+            >
+              Organization Name
+            </label>
+
+            <input
+              id="organizationName"
+              name="organizationName"
+              type="text"
+              value={formData.organizationName}
+              onChange={handleChange}
+              placeholder="Fahim Technologies"
+              required
+              autoComplete="organization"
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
+
           {/* Email */}
           <div>
             <label
@@ -106,21 +145,12 @@ const Login = () => {
 
           {/* Password */}
           <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-
-              <Link
-                to="/forgot-password"
-                className="text-sm font-medium text-primary hover:underline"
-              >
-                Forgot password?
-              </Link>
-            </div>
+            <label
+              htmlFor="password"
+              className="mb-2 block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
 
             <input
               id="password"
@@ -128,11 +158,16 @@ const Login = () => {
               type="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Enter your password"
+              placeholder="Create a password"
               required
-              autoComplete="current-password"
+              minLength={6}
+              autoComplete="new-password"
               className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
+
+            <p className="mt-2 text-xs text-gray-500">
+              Password must be at least 6 characters.
+            </p>
           </div>
 
           {/* Submit */}
@@ -141,18 +176,18 @@ const Login = () => {
             disabled={loading}
             className="w-full rounded-lg bg-primary px-4 py-3 font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 
-        {/* Register */}
+        {/* Login */}
         <p className="mt-6 text-center text-sm text-gray-600">
-          Don't have an organization yet?{" "}
+          Already have an account?{" "}
           <Link
-            to="/register"
+            to="/login"
             className="font-semibold text-primary hover:underline"
           >
-            Create one
+            Sign In
           </Link>
         </p>
       </div>
@@ -160,4 +195,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
