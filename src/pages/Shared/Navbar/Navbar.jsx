@@ -5,6 +5,11 @@ import { useAuth } from "../../context/AuthContext";
 const Navbar = () => {
   const { user, logout } = useAuth();
 
+  const navLinkClass = ({ isActive }) =>
+    `font-medium transition ${
+      isActive ? "text-primary" : "text-gray-600 hover:text-primary"
+    }`;
+
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
       <div className="container mx-auto flex h-16 items-center justify-between px-6">
@@ -15,26 +20,23 @@ const Navbar = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden items-center gap-8 md:flex">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `font-medium transition ${
-                isActive ? "text-primary" : "text-gray-600 hover:text-primary"
-              }`
-            }
-          >
+          <NavLink to="/" className={navLinkClass}>
             Home
           </NavLink>
 
-          <a
-            href="/#plans"
-            className="font-medium text-gray-600 transition hover:text-primary"
-          >
+          <NavLink to="/plans" className={navLinkClass}>
             Plans
-          </a>
+          </NavLink>
+
+          {/* Platform Admin Dashboard */}
+          {user?.platformRole === "PLATFORM_ADMIN" && (
+            <NavLink to="/platform-admin" className={navLinkClass}>
+              Admin Dashboard
+            </NavLink>
+          )}
         </nav>
 
-        {/* Auth Buttons */}
+        {/* Desktop Auth Buttons */}
         <div className="hidden items-center gap-3 md:flex">
           {user ? (
             <>
@@ -94,20 +96,38 @@ const Navbar = () => {
 
           <ul
             tabIndex={0}
-            className="menu dropdown-content z-50 mt-3 w-52 rounded-box bg-white p-3 shadow-lg"
+            className="menu dropdown-content z-50 mt-3 w-56 rounded-box bg-white p-3 shadow-lg"
           >
+            {/* Home */}
             <li>
               <Link to="/">Home</Link>
             </li>
 
+            {/* Plans */}
             <li>
-              <a href="/#plans">Plans</a>
+              <Link to="/plans">Plans</Link>
             </li>
 
-            {user ? (
+            {/* Platform Admin Dashboard */}
+            {user?.platformRole === "PLATFORM_ADMIN" && (
               <li>
-                <button onClick={logout}>Logout</button>
+                <Link to="/platform-admin">Admin Dashboard</Link>
               </li>
+            )}
+
+            {/* Authentication */}
+            {user ? (
+              <>
+                <li>
+                  <span className="font-medium text-gray-700">
+                    {user.name || user.email}
+                  </span>
+                </li>
+
+                <li>
+                  <button onClick={logout}>Logout</button>
+                </li>
+              </>
             ) : (
               <>
                 <li>

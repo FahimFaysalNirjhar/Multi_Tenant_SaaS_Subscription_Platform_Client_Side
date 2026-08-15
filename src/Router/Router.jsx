@@ -1,39 +1,99 @@
 import { createBrowserRouter } from "react-router";
+
 import RootLayout from "../layouts/RootLayout";
 import Home from "../pages/Home/Home";
+
 import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 
+import Plan from "../pages/Plan/Plan";
+
+import PlatformAdminRoute from "../pages/Routes/PlatformAdminRoute";
+import PlatformAdminLayout from "../pages/PlatformAdmin/PlatformAdminLayout";
+import Dashboard from "../pages/PlatformAdmin/Dashboard";
+
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: RootLayout,
     children: [
+      // =========================
+      // Public Routes
+      // =========================
       {
         index: true,
         Component: Home,
       },
+
+      // =========================
+      // Authentication Routes
+      // =========================
       {
         Component: AuthLayout,
         children: [
           {
             path: "login",
-            element: <Login />,
+            Component: Login,
           },
           {
             path: "register",
-            element: <Register />,
+            Component: Register,
           },
           {
             path: "forgot-password",
-            element: <ForgotPassword />,
+            Component: ForgotPassword,
           },
           {
             path: "reset-password/:token",
-            element: <ResetPassword />,
+            Component: ResetPassword,
+          },
+        ],
+      },
+
+      // =========================
+      // Plans
+      // =========================
+      {
+        path: "plans",
+        Component: Plan,
+      },
+
+      // =========================
+      // Platform Admin
+      // =========================
+      {
+        element: <PlatformAdminRoute />,
+        children: [
+          {
+            path: "platform-admin",
+            Component: PlatformAdminLayout,
+            children: [
+              {
+                index: true,
+                Component: Dashboard,
+              },
+
+              // Later:
+              // {
+              //   path: "plans",
+              //   Component: ManagePlans,
+              // },
+              // {
+              //   path: "organizations",
+              //   Component: Organizations,
+              // },
+              // {
+              //   path: "users",
+              //   Component: Users,
+              // },
+              // {
+              //   path: "subscriptions",
+              //   Component: Subscriptions,
+              // },
+            ],
           },
         ],
       },
