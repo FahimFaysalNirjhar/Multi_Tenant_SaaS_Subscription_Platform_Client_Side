@@ -1,7 +1,10 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
+import { useAuth } from "../../context/AuthContext";
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
       <div className="container mx-auto flex h-16 items-center justify-between px-6">
@@ -33,19 +36,36 @@ const Navbar = () => {
 
         {/* Auth Buttons */}
         <div className="hidden items-center gap-3 md:flex">
-          <Link
-            to="/login"
-            className="rounded-lg px-4 py-2 font-medium text-gray-700 transition hover:bg-gray-100"
-          >
-            Login
-          </Link>
+          {user ? (
+            <>
+              <span className="font-medium text-gray-700">
+                {user.name || user.email}
+              </span>
 
-          <Link
-            to="/register"
-            className="rounded-lg bg-primary px-5 py-2 font-semibold text-white transition hover:opacity-90"
-          >
-            Get Started
-          </Link>
+              <button
+                onClick={logout}
+                className="rounded-lg bg-gray-100 px-5 py-2 font-semibold text-gray-700 transition hover:bg-gray-200"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="rounded-lg px-4 py-2 font-medium text-gray-700 transition hover:bg-gray-100"
+              >
+                Login
+              </Link>
+
+              <Link
+                to="/register"
+                className="rounded-lg bg-primary px-5 py-2 font-semibold text-white transition hover:opacity-90"
+              >
+                Get Started
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu */}
@@ -84,13 +104,21 @@ const Navbar = () => {
               <a href="/#plans">Plans</a>
             </li>
 
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
+            {user ? (
+              <li>
+                <button onClick={logout}>Logout</button>
+              </li>
+            ) : (
+              <>
+                <li>
+                  <Link to="/login">Login</Link>
+                </li>
 
-            <li>
-              <Link to="/register">Get Started</Link>
-            </li>
+                <li>
+                  <Link to="/register">Get Started</Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
