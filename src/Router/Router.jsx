@@ -4,6 +4,8 @@ import Home from "../pages/Home/Home";
 import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+import ForgotPassword from "../pages/auth/ForgotPassword";
+import ResetPassword from "../pages/auth/ResetPassword";
 
 export const router = createBrowserRouter([
   {
@@ -25,14 +27,14 @@ export const router = createBrowserRouter([
             path: "register",
             element: <Register />,
           },
-          //   {
-          //     path: "forgot-password",
-          //     element: <ForgotPassword />,
-          //   },
-          //   {
-          //     path: "reset-password/:token",
-          //     element: <ResetPassword />,
-          //   },
+          {
+            path: "forgot-password",
+            element: <ForgotPassword />,
+          },
+          {
+            path: "reset-password/:token",
+            element: <ResetPassword />,
+          },
         ],
       },
     ],
