@@ -14,6 +14,7 @@ import Plan from "../pages/Plan/Plan";
 import PlatformAdminRoute from "../pages/Routes/PlatformAdminRoute";
 import PlatformAdminLayout from "../pages/PlatformAdmin/PlatformAdminLayout";
 import Dashboard from "../pages/PlatformAdmin/Dashboard";
+import ManagePlans from "../pages/PlatformAdmin/Dashboard/ManagePlans";
 
 export const router = createBrowserRouter([
   {
@@ -75,12 +76,10 @@ export const router = createBrowserRouter([
                 index: true,
                 Component: Dashboard,
               },
-
-              // Later:
-              // {
-              //   path: "plans",
-              //   Component: ManagePlans,
-              // },
+              {
+                path: "plans",
+                Component: ManagePlans,
+              },
               // {
               //   path: "organizations",
               //   Component: Organizations,
