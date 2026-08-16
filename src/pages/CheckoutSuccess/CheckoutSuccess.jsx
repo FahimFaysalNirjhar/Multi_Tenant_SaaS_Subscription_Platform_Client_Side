@@ -26,7 +26,7 @@ const CheckoutSuccess = () => {
         )}
 
         <Link
-          to="/dashboard"
+          to="/organization/subscription"
           className="mt-8 inline-block rounded-lg bg-primary px-6 py-3 font-semibold text-white"
         >
           Go to Dashboard
