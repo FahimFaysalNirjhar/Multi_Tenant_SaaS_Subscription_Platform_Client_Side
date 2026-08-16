@@ -2,6 +2,14 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
+const STATUS_STYLES = {
+  ACTIVE: "bg-green-100 text-green-700",
+  PENDING: "bg-yellow-100 text-yellow-700",
+  TRIAL: "bg-blue-100 text-blue-700",
+  SUSPENDED: "bg-red-100 text-red-700",
+  CANCELLED: "bg-gray-100 text-gray-600",
+};
+
 const Organizations = () => {
   const axiosSecure = useAxiosSecure();
 
@@ -35,18 +43,21 @@ const Organizations = () => {
   }, []);
 
   // =========================
-  // Toggle Organization Status
+  // Suspend / Reactivate
   // =========================
   const handleToggleStatus = async (organization) => {
+    const nextStatus =
+      organization.status === "SUSPENDED" ? "ACTIVE" : "SUSPENDED";
+
     try {
       await axiosSecure.patch(`/api/organizations/${organization.id}/status`, {
-        isActive: !organization.isActive,
+        status: nextStatus,
       });
 
       toast.success(
-        `Organization ${
-          organization.isActive ? "deactivated" : "activated"
-        } successfully.`,
+        nextStatus === "ACTIVE"
+          ? "Organization reactivated successfully."
+          : "Organization suspended successfully.",
       );
 
       fetchOrganizations();
@@ -93,8 +104,7 @@ const Organizations = () => {
 
     return (
       organization.name?.toLowerCase().includes(searchValue) ||
-      organization.slug?.toLowerCase().includes(searchValue) ||
-      organization.owner?.email?.toLowerCase().includes(searchValue)
+      organization.admin?.email?.toLowerCase().includes(searchValue)
     );
   });
 
@@ -116,7 +126,7 @@ const Organizations = () => {
             type="text"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search organizations..."
+            placeholder="Search by name or admin email..."
             className="w-full max-w-md rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
         </div>
@@ -149,7 +159,7 @@ const Organizations = () => {
                     </th>
 
                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
-                      Owner
+                      Admin
                     </th>
 
                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
@@ -178,29 +188,21 @@ const Organizations = () => {
                     >
                       {/* Organization */}
                       <td className="px-6 py-5">
-                        <div>
-                          <p className="font-semibold text-gray-900">
-                            {organization.name}
-                          </p>
-
-                          {organization.slug && (
-                            <p className="mt-1 text-sm text-gray-500">
-                              {organization.slug}
-                            </p>
-                          )}
-                        </div>
+                        <p className="font-semibold text-gray-900">
+                          {organization.name}
+                        </p>
                       </td>
 
-                      {/* Owner */}
+                      {/* Admin */}
                       <td className="px-6 py-5">
-                        {organization.owner ? (
+                        {organization.admin ? (
                           <div>
                             <p className="font-medium text-gray-800">
-                              {organization.owner.name || "Unknown"}
+                              {organization.admin.name || "Unknown"}
                             </p>
 
                             <p className="text-sm text-gray-500">
-                              {organization.owner.email}
+                              {organization.admin.email}
                             </p>
                           </div>
                         ) : (
@@ -211,24 +213,20 @@ const Organizations = () => {
                       {/* Members */}
                       <td className="px-6 py-5">
                         <span className="font-medium text-gray-700">
-                          {organization._count?.members ??
-                            organization.members?.length ??
-                            0}
+                          {organization._count?.members ?? 0}
                         </span>
                       </td>
 
                       {/* Status */}
                       <td className="px-6 py-5">
-                        <button
-                          onClick={() => handleToggleStatus(organization)}
+                        <span
                           className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                            organization.isActive
-                              ? "bg-green-100 text-green-700"
-                              : "bg-red-100 text-red-700"
+                            STATUS_STYLES[organization.status] ||
+                            "bg-gray-100 text-gray-600"
                           }`}
                         >
-                          {organization.isActive ? "Active" : "Inactive"}
-                        </button>
+                          {organization.status}
+                        </span>
                       </td>
 
                       {/* Created */}
@@ -248,12 +246,14 @@ const Organizations = () => {
                           <button
                             onClick={() => handleToggleStatus(organization)}
                             className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
-                              organization.isActive
-                                ? "bg-yellow-50 text-yellow-600 hover:bg-yellow-100"
-                                : "bg-green-50 text-green-600 hover:bg-green-100"
+                              organization.status === "SUSPENDED"
+                                ? "bg-green-50 text-green-600 hover:bg-green-100"
+                                : "bg-yellow-50 text-yellow-600 hover:bg-yellow-100"
                             }`}
                           >
-                            {organization.isActive ? "Deactivate" : "Activate"}
+                            {organization.status === "SUSPENDED"
+                              ? "Reactivate"
+                              : "Suspend"}
                           </button>
 
                           <button
