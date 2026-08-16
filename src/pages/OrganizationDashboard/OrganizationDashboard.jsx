@@ -173,7 +173,7 @@ const OrganizationDashboard = () => {
           <div className="grid gap-5 md:grid-cols-3">
             {/* Members */}
             <Link
-              to="/dashboard/members"
+              to="/organization/members"
               className="group rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 transition hover:-translate-y-1 hover:shadow-md"
             >
               <div className="flex items-center justify-between">
@@ -193,7 +193,7 @@ const OrganizationDashboard = () => {
 
             {/* Subscription */}
             <Link
-              to="/dashboard/subscription"
+              to="/organization/subscription"
               className="group rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 transition hover:-translate-y-1 hover:shadow-md"
             >
               <div className="flex items-center justify-between">
@@ -213,7 +213,7 @@ const OrganizationDashboard = () => {
 
             {/* Settings */}
             <Link
-              to="/dashboard/settings"
+              to="/organization/settings"
               className="group rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 transition hover:-translate-y-1 hover:shadow-md"
             >
               <div className="flex items-center justify-between">

@@ -18,6 +18,10 @@ import ManagePlans from "../pages/PlatformAdmin/Dashboard/ManagePlans";
 import Organizations from "../pages/PlatformAdmin/Dashboard/Organizations";
 import OrganizationRoute from "../pages/Routes/OrganizationRoute";
 import OrganizationDashboard from "../pages/OrganizationDashboard/OrganizationDashboard";
+import ManageMembers from "../pages/OrganizationDashboard/Managemembers";
+import Checkout from "../pages/CheckOut/Checkout";
+import CheckoutSuccess from "../pages/CheckoutSuccess/CheckoutSuccess";
+import Subscription from "../pages/OrganizationDashboard/Subscription";
 
 export const router = createBrowserRouter([
   {
@@ -63,15 +67,14 @@ export const router = createBrowserRouter([
             element: <OrganizationDashboard />,
           },
 
-          // Future routes
-          // {
-          //   path: "members",
-          //   element: <Members />,
-          // },
-          // {
-          //   path: "subscription",
-          //   element: <Subscription />,
-          // },
+          {
+            path: "members",
+            element: <ManageMembers />,
+          },
+          {
+            path: "subscription",
+            element: <Subscription />,
+          },
           // {
           //   path: "settings",
           //   element: <OrganizationSettings />,
@@ -87,6 +90,15 @@ export const router = createBrowserRouter([
         Component: Plan,
       },
 
+      {
+        path: "checkout/success",
+        Component: CheckoutSuccess,
+      },
+
+      {
+        path: "checkout/:planId",
+        Component: Checkout,
+      },
       // =========================
       // Platform Admin
       // =========================
