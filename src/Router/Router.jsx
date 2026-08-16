@@ -15,6 +15,9 @@ import PlatformAdminRoute from "../pages/Routes/PlatformAdminRoute";
 import PlatformAdminLayout from "../pages/PlatformAdmin/PlatformAdminLayout";
 import Dashboard from "../pages/PlatformAdmin/Dashboard";
 import ManagePlans from "../pages/PlatformAdmin/Dashboard/ManagePlans";
+import Organizations from "../pages/PlatformAdmin/Dashboard/Organizations";
+import OrganizationRoute from "../pages/Routes/OrganizationRoute";
+import OrganizationDashboard from "../pages/OrganizationDashboard/OrganizationDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -29,9 +32,6 @@ export const router = createBrowserRouter([
         Component: Home,
       },
 
-      // =========================
-      // Authentication Routes
-      // =========================
       {
         Component: AuthLayout,
         children: [
@@ -51,6 +51,31 @@ export const router = createBrowserRouter([
             path: "reset-password/:token",
             Component: ResetPassword,
           },
+        ],
+      },
+
+      {
+        path: "organization",
+        element: <OrganizationRoute />,
+        children: [
+          {
+            index: true,
+            element: <OrganizationDashboard />,
+          },
+
+          // Future routes
+          // {
+          //   path: "members",
+          //   element: <Members />,
+          // },
+          // {
+          //   path: "subscription",
+          //   element: <Subscription />,
+          // },
+          // {
+          //   path: "settings",
+          //   element: <OrganizationSettings />,
+          // },
         ],
       },
 
@@ -80,10 +105,10 @@ export const router = createBrowserRouter([
                 path: "plans",
                 Component: ManagePlans,
               },
-              // {
-              //   path: "organizations",
-              //   Component: Organizations,
-              // },
+              {
+                path: "organizations",
+                Component: Organizations,
+              },
               // {
               //   path: "users",
               //   Component: Users,

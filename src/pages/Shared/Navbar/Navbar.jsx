@@ -10,6 +10,9 @@ const Navbar = () => {
       isActive ? "text-primary" : "text-gray-600 hover:text-primary"
     }`;
 
+  const isPlatformAdmin = user?.platformRole === "PLATFORM_ADMIN";
+  const hasOrganization = Boolean(user?.organization);
+
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
       <div className="container mx-auto flex h-16 items-center justify-between px-6">
@@ -28,15 +31,22 @@ const Navbar = () => {
             Plans
           </NavLink>
 
+          {/* Organization Dashboard */}
+          {user && !isPlatformAdmin && hasOrganization && (
+            <NavLink to="/organization" className={navLinkClass}>
+              Dashboard
+            </NavLink>
+          )}
+
           {/* Platform Admin Dashboard */}
-          {user?.platformRole === "PLATFORM_ADMIN" && (
+          {isPlatformAdmin && (
             <NavLink to="/platform-admin" className={navLinkClass}>
               Admin Dashboard
             </NavLink>
           )}
         </nav>
 
-        {/* Desktop Auth Buttons */}
+        {/* Desktop Auth */}
         <div className="hidden items-center gap-3 md:flex">
           {user ? (
             <>
@@ -98,18 +108,23 @@ const Navbar = () => {
             tabIndex={0}
             className="menu dropdown-content z-50 mt-3 w-56 rounded-box bg-white p-3 shadow-lg"
           >
-            {/* Home */}
             <li>
               <Link to="/">Home</Link>
             </li>
 
-            {/* Plans */}
             <li>
               <Link to="/plans">Plans</Link>
             </li>
 
-            {/* Platform Admin Dashboard */}
-            {user?.platformRole === "PLATFORM_ADMIN" && (
+            {/* Organization Dashboard */}
+            {user && !isPlatformAdmin && hasOrganization && (
+              <li>
+                <Link to="/organization">Dashboard</Link>
+              </li>
+            )}
+
+            {/* Platform Admin */}
+            {isPlatformAdmin && (
               <li>
                 <Link to="/platform-admin">Admin Dashboard</Link>
               </li>
