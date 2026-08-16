@@ -22,6 +22,7 @@ import ManageMembers from "../pages/OrganizationDashboard/Managemembers";
 import Checkout from "../pages/CheckOut/Checkout";
 import CheckoutSuccess from "../pages/CheckoutSuccess/CheckoutSuccess";
 import Subscription from "../pages/OrganizationDashboard/Subscription";
+import OrganizationSettings from "../pages/OrganizationDashboard/OrganizationSettings";
 
 export const router = createBrowserRouter([
   {
@@ -75,10 +76,10 @@ export const router = createBrowserRouter([
             path: "subscription",
             element: <Subscription />,
           },
-          // {
-          //   path: "settings",
-          //   element: <OrganizationSettings />,
-          // },
+          {
+            path: "settings",
+            element: <OrganizationSettings />,
+          },
         ],
       },
 
