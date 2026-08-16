@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "deploy": "npm run build && node -e \"require('fs').copyFileSync('dist/index.html','dist/200.html')\" && surge dist my-saas-app.surge.sh",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",

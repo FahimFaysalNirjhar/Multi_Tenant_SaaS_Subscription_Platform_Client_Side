@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import useAxios from "../../Hooks/useAxios";
+
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const initialFormData = {
   name: "",
@@ -12,7 +13,7 @@ const initialFormData = {
 };
 
 const ManagePlans = () => {
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
 
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
